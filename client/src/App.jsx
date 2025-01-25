@@ -16,6 +16,7 @@ import Listing from './pages/shopping-view/Listing'
 import Home from './pages/shopping-view/Home'
 import CheckAuth from './components/common/CheckAuth'
 import UnauthPage from './pages/unauth-page'
+import { ToastContainer } from 'react-toastify';
 
 const App = () => {
   const isAuthenticated = false;
@@ -23,6 +24,7 @@ const App = () => {
   return (
     <div className='flex flex-col overflow-hidden bg-white'>
       <h1>Header component</h1>
+      <ToastContainer />
       <Routes>
         <Route path='/auth' element={
           <CheckAuth isAuthenticated={isAuthenticated} user={user}>

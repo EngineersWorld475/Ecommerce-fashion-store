@@ -1,7 +1,9 @@
 import CommonForm from '@/components/common/Form'
 import { loginFormControls } from '@/components/config'
+import { loginUser } from '@/store/auth-slice'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 
 const AuthLogin = () => {
   const initailState = {
@@ -11,6 +13,9 @@ const AuthLogin = () => {
 
   const [formData, setFormData] = useState(initailState)
   const [validationErrors, setValidationErrors] = useState({});
+  const dispatch = useDispatch()
+  const { isLoading, error } = useSelector((state) => state.auth)
+  const navigate = useNavigate()
 
  
 
@@ -34,7 +39,13 @@ const AuthLogin = () => {
   
   const onSubmit = (event) => {
     event.preventDefault()
-    validateForm()
+    if(validateForm()) {
+      dispatch(loginUser(formData)).unwrap().then(() => {
+        navigate('/')
+      }).catch((error) => {
+        console.log('Error during registration:', error);
+      })
+    }
 
   }
 
@@ -44,7 +55,10 @@ const AuthLogin = () => {
         <h1 className='text-3xl font-bold tracking-tight text-foreground'>Sign in to your account</h1>
         <p className='mt-2'>Don't have an account <Link className='font-medium text-primary ml-2 hover:underline' to="/auth/register">Register</Link></p>
       </div>
-      <CommonForm formControls={loginFormControls} buttonText={'Sign in'} formData={formData} setFormData={setFormData} onSubmit={onSubmit} validationErrors={validationErrors} />
+      <CommonForm formControls={loginFormControls} buttonText={isLoading ? 'Loading...': 'Sign in'} formData={formData} setFormData={setFormData} onSubmit={onSubmit} validationErrors={validationErrors} />
+      {error && (
+        <p className='mt-4 text-red-500 text-foreground font-sm text-center'>{error}</p>
+      )}
     </div>
   )
 }

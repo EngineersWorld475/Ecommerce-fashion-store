@@ -4,6 +4,7 @@ import { registerUser } from '@/store/auth-slice'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify';
 
 const AuthRegister = () => {
   
@@ -11,6 +12,8 @@ const AuthRegister = () => {
   const navigate = useNavigate();
   const {isLoading, error} = useSelector((state) => state.auth);
   const [validationErrors, setValidationErrors] = useState({});
+  const notify = () => toast("user registered successfully...");
+
 
   const initailState = {
     username: '',
@@ -47,7 +50,10 @@ const AuthRegister = () => {
     if (validateForm()) {
       dispatch(registerUser(formData))
         .unwrap() 
-        .then(() => navigate('/auth/login'))
+        .then(() => {
+          notify()
+          navigate('/auth/login')
+        })
         .catch((err) => {
           console.log('Error during registration:', err);
         });
@@ -55,6 +61,7 @@ const AuthRegister = () => {
 
   } 
   return (
+    <>
     <div className='mx-auto w-full max-w-md space-y-6'>
       <div className='text-center'>
         <h1 className='text-3xl font-bold tracking-tight text-foreground'>Create new account</h1>
@@ -65,6 +72,7 @@ const AuthRegister = () => {
         <p className='mt-4 text-red-500 text-foreground font-sm text-center'>{error}</p>
       )}
     </div>
+    </>
   )
 }
 
