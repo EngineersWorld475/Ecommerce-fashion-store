@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const createError = require('../../utils/errorHandler')
 const registerUser = async (req, res, next) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, email } = req.body;
         // checking for existing email or username
         const existingUser = await User.findOne({ $or: [{ email }, { username }] })
         if (existingUser) {
