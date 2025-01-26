@@ -15,7 +15,7 @@ const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText 
         element = <input type={getControlItem.type} name={getControlItem.name} placeholder={getControlItem.placeholder} id={getControlItem.name} value={value} onChange={(e) => setFormData({
           ...formData,
           [getControlItem.name] : e.target.value
-        })}  className='px-2'/>
+        })}  className='px-5'/>
         break;
       case 'select':
         element = <Select onValueChange={(value) => setFormData({
