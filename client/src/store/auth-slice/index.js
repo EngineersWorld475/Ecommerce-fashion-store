@@ -4,14 +4,15 @@ import axios from 'axios';
 const initialState = {
     isAuthenticated: false,
     isLoading: false,
-    user: null
+    user: null,
+    error: null
 }
 
 export const registerUser = createAsyncThunk('/auth/register', async (formData) => {
-    const response = await axios.post('http://localhost:5000/api/auth/register', formData, {
-        withCredentials: true
-    })
-    return response.data;
+        const response = await axios.post('http://localhost:5000/api/auth/register', formData, {
+            withCredentials: true
+        })
+        return response.data;
 })
 
 
@@ -29,10 +30,12 @@ const authSlice = createSlice({
             state.isLoading = false;
             state.user = null;
             state.isAuthenticated = false;
-        }).addCase(registerUser.rejected, (state) => {
+            state.error = null
+        }).addCase(registerUser.rejected, (state, action) => {
             state.isLoading = false;
             state.user = null;
             state.isAuthenticated = false;
+            state.error= action.payload || 'Registration failed';
         })
     }
 

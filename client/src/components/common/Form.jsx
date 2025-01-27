@@ -5,17 +5,35 @@ import { SelectValue } from '@radix-ui/react-select';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 
-const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText }) => {
+const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText, validationErrors }) => {
 
   const renderInputsByComponentType = (getControlItem) => {
     let element = null;
     const value = formData[getControlItem.name] || ''
     switch (getControlItem.componentType) {
       case 'input':
-        element = <input type={getControlItem.type} name={getControlItem.name} placeholder={getControlItem.placeholder} id={getControlItem.name} value={value} onChange={(e) => setFormData({
+        element = <><input type={getControlItem.type} name={getControlItem.name} placeholder={getControlItem.placeholder} id={getControlItem.name} value={value} onChange={(e) => setFormData({
           ...formData,
           [getControlItem.name] : e.target.value
-        })}  className='px-5'/>
+        })}  className='px-5 outline-none'/>
+        <div>
+            {getControlItem.name === 'username' && validationErrors.username && (
+              <p className="mt-1 text-sm text-red-500">
+                {validationErrors.username}
+              </p>
+            )}
+            {getControlItem.name === 'email' && validationErrors.email && (
+              <p className="mt-1 text-sm text-red-500">
+                {validationErrors.email}
+              </p>
+            )}
+            {getControlItem.name === 'password' && validationErrors.password && (
+              <p className="mt-1 text-sm text-red-500">
+                {validationErrors.password}
+              </p>
+            )}
+          </div>
+        </>
         break;
       case 'select':
         element = <Select onValueChange={(value) => setFormData({
@@ -58,7 +76,7 @@ const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText 
         {
           formControls.map((controlItem) => {
             return (
-              <div key={controlItem.name} className='grid w-full'>
+              <div key={controlItem.id} className='grid w-full'>
                 <Label className="mb-1">{controlItem.label}</Label>
                 {
                   renderInputsByComponentType(controlItem)
@@ -73,4 +91,4 @@ const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText 
   )
 }
 
-export default CommonForm
+export default React.memo(CommonForm)
