@@ -34,7 +34,7 @@ const loginUser = async (req, res, next) => {
         const { email, password } = req.body;
         const existingUser = await User.findOne({ email })
 
-        if (!existingUser) {
+        if (!existingUser) { 
             return next(createError(400, 'user is not registered'))
         }
 

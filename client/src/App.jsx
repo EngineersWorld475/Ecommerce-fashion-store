@@ -19,6 +19,8 @@ import UnauthPage from './pages/unauth-page'
 import { ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux'
 import { checkAuth } from './store/auth-slice'
+import { Skeleton } from "@/components/ui/skeleton"
+
 
 const App = () => {
   const { isAuthenticated, user, isLoading } = useSelector((state) => state.auth)
@@ -31,10 +33,15 @@ const App = () => {
     dispatch(checkAuth())
   }, [dispatch])
 
+  if(isLoading) {
+    return <div>
+      <Skeleton className="w-full h-[600px]" />
+    </div>
+  }
+
 
   return (
     <div className='flex flex-col overflow-hidden bg-white'>
-      <h1>Header component</h1>
       <ToastContainer />
       <Routes>
       <Route path='/auth' element={<AuthLayout />}>
@@ -44,7 +51,7 @@ const App = () => {
         <Route path='/admin' element={
           <CheckAuth isAuthenticated={isAuthenticated} user={user}>
             <AdminLayout />
-          </CheckAuth>
+          </CheckAuth> 
         }>
           <Route path='dashboard' element={<Dashboard />} />
           <Route path='features' element={<Features />} />
@@ -57,7 +64,7 @@ const App = () => {
           </CheckAuth>
         }>
           <Route path='home' element={<Home />} />
-          <Route path='accounts' element={<Accounts />} />
+          <Route path='accounts' element={<Accounts />} />s
           <Route path='checkout' element={<Checkout />} />
           <Route path='listing' element={<Listing />} />
         </Route>
