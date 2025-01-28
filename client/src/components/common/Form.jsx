@@ -2,7 +2,7 @@ import React from 'react'
 import { Label } from '../ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Textarea } from '../ui/textarea';
-import { Button } from '../ui/button';s
+import { Button } from '../ui/button';
 
 const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText, validationErrors }) => {
 
@@ -40,7 +40,7 @@ const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText,
           [getControlItem.name] : value
         })} value={value}>
           <SelectTrigger className="w-full">
-            <SelectValue placeholder={getControlItem.placeholder} />
+            <SelectValue placeholder={getControlItem.placeholder}/>
           </SelectTrigger>
           <SelectContent className="bg-white">
             {getControlItem?.options && getControlItem?.options.length > 0 ? getControlItem?.options?.map(optionItem => <SelectItem key={optionItem.id} value={optionItem.id}>{optionItem.label}</SelectItem>) : null}
