@@ -17,7 +17,10 @@ const AdminSidebar = ({open, setOpen }) => {
       {adminSidebarMenuItems.map((item) => (
         <div
           key={item.id}
-          onClick={() => navigate(item.path)}
+          onClick={() => {
+            navigate(item.path)
+            setOpen(false)
+          }}
           className="flex items-center gap-2 px-3 py-2 border rounded-lg hover:bg-gray-700 hover:text-white cursor-pointer"
         >
           {item.icon}
@@ -59,4 +62,4 @@ const AdminSidebar = ({open, setOpen }) => {
   );
 };
 
-export default AdminSidebar;
+export default React.memo(AdminSidebar);

@@ -19,4 +19,4 @@ const AdminHeader = ({setOpen}) => {
   )
 }
 
-export default AdminHeader
+export default React.memo(AdminHeader)
