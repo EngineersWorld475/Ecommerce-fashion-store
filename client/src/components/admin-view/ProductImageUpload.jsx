@@ -67,4 +67,4 @@ const ProductImageUpload = ({ file, setFile, uploadedImageUrl, setUploadedImageU
   )
 }
 
-export default ProductImageUpload
+export default React.memo(ProductImageUpload)

@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors')
 const app = express()
 const authRoutes = require('./routes/auth/auth-routes')
+const adminProductsRouter = require('./routes/admin/product-routes')
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(cors({
 
 // routes
 app.use('/api/auth', authRoutes)
+app.use('/api/admin/products', adminProductsRouter)
 
 // creating a database connection
 mongoose.connect(`mongodb+srv://imedward171:P7kNinWHyVmm3E4Z@e-cluster.jcjsy.mongodb.net/`).then(() => console.log('Database connected successfully...')).catch((error) => console.log(error))
