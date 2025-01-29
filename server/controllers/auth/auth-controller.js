@@ -51,7 +51,7 @@ const loginUser = async (req, res, next) => {
             message: 'User login successfully',
             user: {
                 email: existingUser.email,
-                role: existingUser.role,
+                role: existingUser.role, 
                 id: existingUser._id
             }
         })

@@ -30,7 +30,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/admin/products', adminProductsRouter)
 
 // creating a database connection
-mongoose.connect(`mongodb+srv://imedward171:P7kNinWHyVmm3E4Z@e-cluster.jcjsy.mongodb.net/`).then(() => console.log('Database connected successfully...')).catch((error) => console.log(error))
+mongoose.connect(process.env.MONGO_URL).then(() => console.log('Database connected successfully...')).catch((error) => console.log(error))
 
 const PORT = process.env.PORT || 5000;
 
