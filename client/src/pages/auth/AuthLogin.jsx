@@ -17,7 +17,7 @@ const AuthLogin = () => {
   const { isLoading, error } = useSelector((state) => state.auth)
   const navigate = useNavigate()
 
- 
+
 
   const validateForm = () => {
     const errors = {};
@@ -36,12 +36,16 @@ const AuthLogin = () => {
     setValidationErrors(errors);
     return Object.keys(errors).length === 0; // Return true if no errors
   };
-  
+
   const onSubmit = (event) => {
     event.preventDefault()
-    if(validateForm()) {
-      dispatch(loginUser(formData)).unwrap().then(() => {
-        navigate('/')
+    if (validateForm()) {
+      dispatch(loginUser(formData)).unwrap().then((result) => {
+        if (result.user.role === 'user') {
+          navigate('/shop/home')
+        } else {
+          navigate('/admin/dashboard')
+        }
       }).catch((error) => {
         console.log('Error during registration:', error);
       })
@@ -55,7 +59,7 @@ const AuthLogin = () => {
         <h1 className='text-3xl font-bold tracking-tight text-foreground'>Sign in to your account</h1>
         <p className='mt-2'>Don't have an account <Link className='font-medium text-primary ml-2 hover:underline' to="/auth/register">Register</Link></p>
       </div>
-      <CommonForm formControls={loginFormControls} buttonText={isLoading ? 'Loading...': 'Sign in'} formData={formData} setFormData={setFormData} onSubmit={onSubmit} validationErrors={validationErrors} />
+      <CommonForm formControls={loginFormControls} buttonText={isLoading ? 'Loading...' : 'Sign in'} formData={formData} setFormData={setFormData} onSubmit={onSubmit} validationErrors={validationErrors} />
       {error && (
         <p className='mt-4 text-red-500 text-foreground font-sm text-center'>{error}</p>
       )}

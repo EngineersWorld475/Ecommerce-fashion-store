@@ -1,0 +1,19 @@
+const jwt = require("jsonwebtoken")
+const createError = require("../utils/errorHandler")
+
+const authMiddleware = (req, res, next) => {
+    const token = req.cookies.token;
+    if(!token) {
+        next(createError(401, 'Unauthorized user!'))
+    }
+
+   try {
+    const decoded = jwt.verify(token, process.env.CLIENT_SECRET_KEY);
+    req.user = decoded
+    next()
+   } catch (error) {
+    next(error)
+   } 
+}
+
+module.exports = authMiddleware;

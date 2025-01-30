@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const createError = require('../../utils/errorHandler')
 
-const registerUser = async (req, res, next) => {
+const registerUser = async (req, res, next) => { 
     try {
         const { username, password, email } = req.body;
         // checking for existing email or username
@@ -44,7 +44,7 @@ const loginUser = async (req, res, next) => {
             return next(createError(401, 'please enter the correct password'))
         }
 
-        const token = jwt.sign({ id: existingUser._id, role: existingUser.role, email: existingUser.email }, process.env.CLIENT_SECRET_KEY, { expiresIn: '60m' })
+        const token = jwt.sign({ id: existingUser._id, role: existingUser.role, email: existingUser.email }, process.env.CLIENT_SECRET_KEY, { expiresIn: '1d' })
 
         res.cookie('token', token, { httpOnly: true, secure: false }).json({
             success: true,
@@ -60,5 +60,11 @@ const loginUser = async (req, res, next) => {
     }
 }
 
+const logoutUser = (req, res) => {
+   return  req.clearCookie('token').json({
+        message: "User logout successfully"
+    })
+}
 
-module.exports = { registerUser, loginUser }
+
+module.exports = { registerUser, loginUser,logoutUser }

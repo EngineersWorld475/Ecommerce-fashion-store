@@ -1,5 +1,5 @@
-import React from 'react'
-import { Route, Router, Routes } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import AuthLayout from './components/auth/AuthLayout'
 import AuthLogin from './pages/auth/AuthLogin'
 import AuthRegister from './pages/auth/AuthRegister'
@@ -17,20 +17,27 @@ import Home from './pages/shopping-view/Home'
 import CheckAuth from './components/common/CheckAuth'
 import UnauthPage from './pages/unauth-page'
 import { ToastContainer } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux'
+import { checkAuth } from './store/auth-slice'
 
 const App = () => {
-  const isAuthenticated = false;
-  const user = null;
+  const { isAuthenticated, user, isLoading } = useSelector((state) => state.auth)
+  const dispatch = useDispatch();
+  console.log('...isAuthenticated', isAuthenticated)
+  console.log('...user', user)
+  console.log('...isLoading', isLoading)
+
+  useEffect(() => {
+    dispatch(checkAuth())
+  }, [dispatch])
+
+
   return (
     <div className='flex flex-col overflow-hidden bg-white'>
       <h1>Header component</h1>
       <ToastContainer />
       <Routes>
-        <Route path='/auth' element={
-          <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-            <AuthLayout />
-          </CheckAuth>
-        }>
+      <Route path='/auth' element={<AuthLayout />}>
           <Route path='login' element={<AuthLogin />} />
           <Route path='register' element={<AuthRegister />} />
         </Route>
@@ -54,6 +61,7 @@ const App = () => {
           <Route path='checkout' element={<Checkout />} />
           <Route path='listing' element={<Listing />} />
         </Route>
+        <Route path='/' element={<Navigate to='/shop/home' replace />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/unauth-page" element={<UnauthPage />} />
       </Routes>
