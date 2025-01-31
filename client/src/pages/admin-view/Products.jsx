@@ -2,8 +2,11 @@ import ProductImageUpload from '@/components/admin-view/ProductImageUpload'
 import Form from '@/components/common/Form'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { useToast } from '@/hooks/use-toast'
+import { addNewProduct, getProducts } from '@/store/admin/products-slice'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Products = () => {
   const initialFormData = {
@@ -22,6 +25,9 @@ const Products = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState('')
   const [imageLoadingState, setImageLoadingState] = useState(false)
   const [categories, setCategories] = useState([])
+  const dispatch = useDispatch()
+  const { listOfProducts } = useSelector((state) => state.adminProducts)
+  const { toast } = useToast()
 
   const getCategories = async () => {
     try {
@@ -104,14 +110,31 @@ const Products = () => {
 
 
 
-  const onSubmit = () => {
-
+  const onSubmit = (e) => {
+    e.preventDefault()
+    dispatch(addNewProduct({
+      ...formData,
+      image: uploadedImageUrl
+    })).then((result => {
+      if (result?.payload?.success) {
+        dispatch(getProducts())
+        setOpenCreateProductsDialogue(false);
+        setImageFile(null)
+        setFormData(initialFormData)
+        toast({
+          title: 'Product added successfully'
+        })
+      }
+    }))
   }
 
   useEffect(() => {
     getCategories()
   }, [])
 
+  useEffect(() => {
+    dispatch(getProducts())
+  }, [dispatch])
   return (
     <>
       <div className='flex mb-5 w-full justify-end'>
@@ -123,7 +146,7 @@ const Products = () => {
             <SheetHeader>
               <SheetTitle>Add New Product</SheetTitle>
             </SheetHeader>
-            <ProductImageUpload file={imageFile} setFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl} setImageLoadingState={setImageLoadingState} />
+            <ProductImageUpload file={imageFile} setFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl} setImageLoadingState={setImageLoadingState} imageLoadingState={imageLoadingState} />
             <div className='py-6'>
               <Form formControls={addProductFormElements} formData={formData} setFormData={setFormData} buttonText='Add' onSubmit={onSubmit} />
             </div>
