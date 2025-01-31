@@ -68,16 +68,16 @@ const fetchProducts = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const findProduct = await Product.findById(id);
-        if(!findProduct) {
-           return next(createError(404, 'selected product is not available'))
+        if (!findProduct) {
+            return next(createError(404, 'selected product is not available'))
         }
 
         const updatedProduct = await Product.findByIdAndUpdate(
             id,
             req.body,
-            {new: true, runValidators: true}
+            { new: true, runValidators: true }
         )
 
         res.status(200).json({
@@ -90,4 +90,26 @@ const updateProduct = async (req, res, next) => {
     }
 }
 
-module.exports = { handleImageUpload }
+// delete product 
+
+const deleteProduct = async (req, re, next) => {
+    try {
+        const { id } = req.params;
+        const existingProduct = await Product.findOne({ id });
+        if (!existingProduct) {
+            return next(createError(404, 'Selected product is not available'))
+        }
+
+        const deletedProduct = await Product.findByIdAndDelete(id)
+        res.status(200).json({
+            success: true,
+            message: 'Product deleted successfully',
+            deletedProduct
+        })
+    } catch (error) {
+        next(error)
+    }
+
+}
+
+module.exports = { handleImageUpload, addProduct, fetchProducts, updateProduct, deleteProduct }
