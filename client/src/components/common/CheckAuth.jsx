@@ -12,6 +12,9 @@ const CheckAuth = ({ isAuthenticated, user, children }) => {
             return <Navigate to='/shop/home' />
         }
     }
+    if(!isAuthenticated && user === null) {
+        return <Navigate to='/auth/login' />
+    }
     if (isAuthenticated && user?.role !== 'admin' && location.pathname.includes('admin')) {
         return <Navigate to='/unauth-page' />
     }
