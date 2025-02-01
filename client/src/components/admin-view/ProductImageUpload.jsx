@@ -6,7 +6,7 @@ import { Button } from '../ui/button'
 import axios from 'axios'
 import { Skeleton } from '../ui/skeleton'
 
-const ProductImageUpload = ({ file, setFile, uploadedImageUrl, setUploadedImageUrl, setImageLoadingState, imageLoadingState }) => {
+const ProductImageUpload = ({ file, setFile, uploadedImageUrl, setUploadedImageUrl, setImageLoadingState, imageLoadingState, isEditMode }) => {
   const inputRef = useRef(null)
 
   const handleImageFileChange = (e) => {
@@ -58,15 +58,15 @@ const ProductImageUpload = ({ file, setFile, uploadedImageUrl, setUploadedImageU
 
   return (
     <>
-      <div className='w-full max-w-md mx-auto mt-10'>
+      <div className={`${isEditMode ? 'opacity-50' : ''} w-full max-w-md mx-auto mt-10`}>
         <Label className="text-md font-semibold block">Upload image</Label>
       </div>
       <div onDragOver={handleDragOver} onDrop={handleDrop} className='border-2 border-dashed rounded-xl p-4 mt-3'>
-        <Input type="file" id='upload-image' className="hidden" ref={inputRef} onChange={handleImageFileChange} />
+        <Input type="file" id='upload-image' className="hidden" ref={inputRef} onChange={handleImageFileChange} disabled={isEditMode} />
         {
-          !file ? <Label htmlFor="upload-image" className="flex flex-col justify-center items-center h-32 cursor-pointer">
-            <UploadCloudIcon className='w-10 h-10 text-muted-foreground mb-2' />
-            <span>drag & drop or click to upload</span>
+          !file ? <Label htmlFor="upload-image" className={`${isEditMode ? 'cursor-not-allowed': ''} flex flex-col justify-center items-center h-32 cursor-pointer`}>
+            <UploadCloudIcon className={`${isEditMode ? 'opacity-50' : ''}w-10 h-10 text-muted-foreground mb-2`} />
+            <span className={`${isEditMode ? 'opacity-50' : ''}`}>drag & drop or click to upload</span>
           </Label> : (imageLoadingState ? <Skeleton className='h-20 bg-gray-300' /> : <div className='flex items-cener justify-between'>
             <div className='flex items-center'>
               <FileIcon className='w-7 h-7 text-primary mr-2' />

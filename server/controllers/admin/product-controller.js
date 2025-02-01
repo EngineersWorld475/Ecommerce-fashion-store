@@ -31,7 +31,7 @@ const addProduct = async (req, res, next) => {
     try {
         const { image, title, description, category, brand, price, salePrice, totalStock } = req.body;
         if (!image || !title || !description || !category || !brand || !price || !salePrice || !totalStock) {
-            return next(createError(400, 'Please provie all the fields'))
+            return next(createError(400, 'Please provide all the fields'))
         }
 
         const newProduct = new Product({
@@ -92,10 +92,10 @@ const updateProduct = async (req, res, next) => {
 
 // delete product 
 
-const deleteProduct = async (req, re, next) => {
+const deleteProduct = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const existingProduct = await Product.findOne({ id });
+        const existingProduct = await Product.findById(id);
         if (!existingProduct) {
             return next(createError(404, 'Selected product is not available'))
         }

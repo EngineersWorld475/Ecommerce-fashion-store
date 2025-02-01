@@ -4,7 +4,7 @@ import Form from '@/components/common/Form'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { useToast } from '@/hooks/use-toast'
-import { addNewProduct, getProducts } from '@/store/admin/products-slice'
+import { addNewProduct, deleteProduct, editProduct, getProducts } from '@/store/admin/products-slice'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -25,7 +25,9 @@ const Products = () => {
   const [imageFile, setImageFile] = useState(null)
   const [uploadedImageUrl, setUploadedImageUrl] = useState('')
   const [imageLoadingState, setImageLoadingState] = useState(false)
+  const [currentProductId, setCurrentProductId] = useState(null)
   const [categories, setCategories] = useState([])
+
   const dispatch = useDispatch()
   const { listOfProducts } = useSelector((state) => state.adminProducts)
   const { toast } = useToast()
@@ -109,24 +111,48 @@ const Products = () => {
     }
   ]
 
+  function isFormValid() {
+    return Object.keys(formData).map((key) => formData[key] !== '').every((item)=> item);
+  }
 
 
   const onSubmit = (e) => {
     e.preventDefault()
-    dispatch(addNewProduct({
-      ...formData,
-      image: uploadedImageUrl
-    })).then((result => {
-      if (result?.payload?.success) {
+    if(currentProductId !== null) {
+      dispatch(editProduct({id: currentProductId, formData})).then((result) => {
         dispatch(getProducts())
-        setOpenCreateProductsDialogue(false);
-        setImageFile(null)
         setFormData(initialFormData)
+        setCurrentProductId(null)
         toast({
-          title: 'Product added successfully'
+          title: 'Product edited successfully'
         })
-      }
-    }))
+        setOpenCreateProductsDialogue(false)
+      })
+    } else {
+      dispatch(addNewProduct({
+        ...formData,
+        image: uploadedImageUrl
+      })).then((result => {
+        if (result?.payload?.success) {
+          dispatch(getProducts())
+          setOpenCreateProductsDialogue(false);
+          setImageFile(null)
+          setFormData(initialFormData)
+          toast({
+            title: 'Product added successfully'
+          })
+        }
+      }))
+    }
+  }
+
+  const handleDelete = (id) => {
+    dispatch(deleteProduct(id)).then((result) => {
+      dispatch(getProducts())
+      toast({
+        title: 'Product deleted successfully'
+      })
+    })
   }
 
   useEffect(() => {
@@ -142,16 +168,24 @@ const Products = () => {
         <Button onClick={() => setOpenCreateProductsDialogue(true)} className="bg-black">Add New Product</Button>
       </div>
       <div className='grid gap-4 md:grid-cols-3 lg:grid-cols-4'>
-        {listOfProducts && listOfProducts.data && listOfProducts.data.length > 0 ? listOfProducts.data.map((productItem) => <ProductTile product={productItem} />) : null}
+        {listOfProducts && listOfProducts.data && listOfProducts.data.length > 0 ? listOfProducts.data.map((productItem) => <ProductTile key={productItem?._id} setCurrentProductId={setCurrentProductId}  setOpenCreateProductsDialogue={setOpenCreateProductsDialogue} setFormData={setFormData} product={productItem} handleDelete={handleDelete} />) : 
+          <div>
+            <h3>Loading....</h3>
+          </div>
+        }
       </div>
-      <Sheet open={openCreateProductsDialogue} onOpenChange={setOpenCreateProductsDialogue}>
+      <Sheet open={openCreateProductsDialogue} onOpenChange={() => {
+        setOpenCreateProductsDialogue(false)
+        setCurrentProductId(null)
+        setFormData(initialFormData)
+      }}>
         <SheetContent side="right" className="overflow-auto bg-white">
           <SheetHeader>
-            <SheetTitle>Add New Product</SheetTitle>
+            <SheetTitle>{currentProductId ? 'Edit product' : 'Add New Product'}</SheetTitle>
           </SheetHeader>
-          <ProductImageUpload file={imageFile} setFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl} setImageLoadingState={setImageLoadingState} imageLoadingState={imageLoadingState} />
+          <ProductImageUpload file={imageFile} setFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl} setImageLoadingState={setImageLoadingState} imageLoadingState={imageLoadingState} isEditMode={currentProductId !== null} />
           <div className='py-6'>
-            <Form formControls={addProductFormElements} formData={formData} setFormData={setFormData} buttonText='Add' onSubmit={onSubmit} />
+            <Form  formControls={addProductFormElements} formData={formData} setFormData={setFormData} buttonText={currentProductId ? 'Edit' : 'Add'} onSubmit={onSubmit} isBtnDisabled={isFormValid()}/>
           </div>
         </SheetContent>
       </Sheet>
