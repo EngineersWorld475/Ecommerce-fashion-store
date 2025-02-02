@@ -52,7 +52,13 @@ export default  defineConfig({
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			}
-  		}
+  		},
+		  spacing: {
+			'40': '40px',
+			'100': '100px',
+			'20' : '20px',
+			'10' : '10px'
+		  },
   	}
   },
   plugins: [require("tailwindcss-animate")],

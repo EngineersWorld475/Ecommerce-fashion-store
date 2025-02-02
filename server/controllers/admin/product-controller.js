@@ -90,7 +90,7 @@ const updateProduct = async (req, res, next) => {
     }
 }
 
-// delete product 
+// delete product  
 
 const deleteProduct = async (req, res, next) => {
     try {

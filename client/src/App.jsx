@@ -67,7 +67,7 @@ const App = () => {
           </CheckAuth>
         }>
           <Route path='home' element={<Home />} />
-          <Route path='accounts' element={<Accounts />} />s
+          <Route path='accounts' element={<Accounts />} />
           <Route path='checkout' element={<Checkout />} />
           <Route path='listing' element={<Listing />} />
         </Route>
