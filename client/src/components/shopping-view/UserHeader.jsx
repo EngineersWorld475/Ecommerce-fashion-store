@@ -34,6 +34,38 @@ const UserHeader = () => {
       </nav>
     )
   }
+
+  const HeaderRightContent = () => {
+    return <>
+       <div className='hidden lg:flex flex-row justify-center items-center gap-7'>
+        <ShoppingBag style={{ color: '#60C54B', width: '30px', height: '30px', cursor: 'pointer' }} />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <div
+              className='flex items-center justify-center text-center font-semibold text-lg rounded-full w-8 h-8 pb-1'
+              style={{ backgroundColor: '#60C54B', color: 'white', outline: 'none' }}
+            >
+              {user.username[0]}
+            </div>
+
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className='bg-white'>
+          <DropdownMenuItem ><p className="text-gray-500">Logged in as {user?.username}</p></DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Link className="text-gray-500">Accounts</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Button onClick={handleLogout} variant="outline" className="border border-red-500  py-3 text-red-500 hover:bg-red-600 hover:text-white ">Logout</Button>
+          </DropdownMenuItem>
+          </DropdownMenuContent>
+          
+        </DropdownMenu>
+      </div>
+    </>
+
+  }
   return (
     <header className='sticky top-0 z-40 w-full border-b bg-background'>
       <div className='flex items-center justify-between px-10 py-20 lg:py-40 lg:px-100'>
@@ -50,6 +82,7 @@ const UserHeader = () => {
           </SheetTrigger>
           <SheetContent className="w-full max-w-xs bg-white">
             <MenuItems />
+            <HeaderRightContent />
           </SheetContent>
         </Sheet>
         <div className='hidden lg:block'>
@@ -57,39 +90,15 @@ const UserHeader = () => {
             <MenuItems />
           </div>
         </div>
+        {/* header right content */}
         {!isAuthenticated ? (
-          <div className='flex flex-row gap-7 justify-center items-center'>
-            <Button onClick={() => navigate('/auth/login')} variant="outline" className="py-4 rounded-xl" style={{ color: '#60C54B' }}>Sign-in</Button>
-            <CircleUserRound style={{ color: '#60C54B', width: '30px', height: '30px', cursor: 'pointer', }} />
-          </div>
-        ) : <div className='flex flex-row gap-7 justify-center items-center'>
-          <ShoppingBag style={{ color: '#60C54B', width: '30px', height: '30px', cursor: 'pointer' }} />
+        <div className='hidden lg:flex flex-row justify-center items-center gap-7'>
+        <Button onClick={() => navigate('/auth/login')} variant="outline" className="py-4 rounded-xl" style={{ color: '#60C54B' }}>Sign-in</Button>
+        <CircleUserRound style={{ color: '#60C54B', width: '30px', height: '30px', cursor: 'pointer', }} />
+      </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <div
-                className='flex items-center justify-center text-center font-semibold text-lg rounded-full w-8 h-8 pb-1'
-                style={{ backgroundColor: '#60C54B', color: 'white' }}
-              >
-                {user.username[0]}
-              </div>
-
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className='bg-white'>
-            <DropdownMenuItem ><p className="text-gray-500">Logged in as {user?.username}</p></DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <Link className="text-gray-500">Accounts</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Button onClick={handleLogout} variant="outline" className="border border-red-500  py-3 text-red-500 hover:bg-red-600 hover:text-white ">Logout</Button>
-            </DropdownMenuItem>
-            </DropdownMenuContent>
-            
-          </DropdownMenu>
-        </div>
-
-
+        
+      ): <HeaderRightContent />
         }
       </div>
     </header>
