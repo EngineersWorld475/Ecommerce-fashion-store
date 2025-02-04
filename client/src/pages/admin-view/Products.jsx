@@ -4,6 +4,7 @@ import Form from '@/components/common/Form'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { useToast } from '@/hooks/use-toast'
+import { getCategories } from '@/store/admin/category-slice'
 import { addNewProduct, deleteProduct, editProduct, getProducts } from '@/store/admin/products-slice'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
@@ -27,24 +28,14 @@ const Products = () => {
   const [imageLoadingState, setImageLoadingState] = useState(false)
   const [currentProductId, setCurrentProductId] = useState(null)
   const [categories, setCategories] = useState([])
+  const {listOfCategories} = useSelector((state) => state.adminCategories)
 
   const dispatch = useDispatch()
   const { listOfProducts } = useSelector((state) => state.adminProducts)
   const { toast } = useToast()
 
-  const getCategories = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/api/admin/category/get-categories')
-      if (response?.data?.categories) {
-        setCategories(response.data.categories)
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
-
-  const categoryOptions = categories.map((cat) => {
+  const categoryOptions = listOfCategories?.categories?.map((cat) => {
     return (
       {
         id: cat._id,
@@ -156,7 +147,7 @@ const Products = () => {
   }
 
   useEffect(() => {
-    getCategories()
+    dispatch(getCategories())
   }, [])
 
   useEffect(() => {

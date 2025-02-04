@@ -6,6 +6,8 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useToast } from "@/hooks/use-toast"
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableRow } from '@/components/ui/table'
+import { useDispatch, useSelector } from 'react-redux'
+import { AddCategory, deleteCategory, getCategories } from '@/store/admin/category-slice'
 
 const Categories = () => {
     const [openCreateCategoryDialogue, setOpenCreateProductsDialogue] = useState(false)
@@ -14,24 +16,29 @@ const Categories = () => {
     })
     const [categories, setCategories] = useState(null);
     const { toast } = useToast()
+    const dispatch = useDispatch()
+    const { listOfCategories } = useSelector((state) => state.adminCategories)
+
 
     const onSubmit = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.post('http://localhost:5000/api/admin/category/create-category', formData)
-            setOpenCreateProductsDialogue(false)
-            setCategories([
-                ...categories,
-                response?.data?.newCategory
-            ])
-            setFormData({
-                categoryName: ''
+            dispatch(AddCategory(formData)).then((data) => {
+                if(data?.payload?.success) {
+                    dispatch(getCategories())
+                    setFormData({
+                        categoryName: ''
+                    })
+                    setOpenCreateProductsDialogue(false)
+                    toast({
+                        variant: "destructive",
+                        title: "Success",
+                        description: "Category added successfully",
+                    })
+                }
+                
             })
-            toast({
-                variant: "destructive",
-                title: "Success",
-                description: "Category added successfully",
-            })
+            
         } catch (error) {
             toast({
                 title: 'Error',
@@ -40,26 +47,18 @@ const Categories = () => {
         }
     }
 
-    const getCategories = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/admin/category/get-categories')
-            if (response?.data?.categories) {
-                setCategories(response.data.categories)
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
-    const deleteCategory = async (id) => {
+    const onDelete = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:5000/api/admin/category/delete-category/${id}`);
-            toast({
-                title: "Success",
-                description: "Category deleted successfully",
+            dispatch(deleteCategory(id)).then((data) => {
+                if(data?.payload?.success) {
+                    dispatch(getCategories())
+                    toast({
+                        title: "Success",
+                        description: "Category deleted successfully",
+                    })
+                }
             })
-            const newCategories = categories.filter((cat) => cat._id !== response?.data?.deletedCategory?._id)
-            setCategories(newCategories)
         } catch (error) {
             toast({
                 title: "Error",
@@ -69,7 +68,7 @@ const Categories = () => {
     }
 
     useEffect(() => {
-        getCategories()
+        dispatch(getCategories())
     }, [])
 
     return (
@@ -86,14 +85,14 @@ const Categories = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {categories?.map((category) => {
+                        {listOfCategories?.categories?.map((category) => {
                             return (
 
                                 <TableRow key={category._id}>
 
                                     <TableCell className="font-medium">{category.categoryName}</TableCell>
                                     <TableCell className="font-medium">
-                                        <Button className="bg-red-500 rounded-xl h-15" onClick={() => deleteCategory(category._id)}>Delete</Button>
+                                        <Button className="bg-red-500 rounded-xl h-15" onClick={() => onDelete(category._id)}>Delete</Button>
                                     </TableCell>
 
                                 </TableRow>

@@ -4,7 +4,8 @@ import axios from "axios";
 
 const initialState = {
     isLoading: false,
-    listOfProducts: []
+    listOfProducts: [],
+    listOfCategories: []
 }
 
 export const addNewProduct = createAsyncThunk('/products/addNewProduct', async (formData) => {
