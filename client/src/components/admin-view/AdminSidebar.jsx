@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import { BadgeCheck, ChartNoAxesCombined, LayoutDashboard, ShoppingBasket } from "lucide-react";
+import { BadgeCheck, ChartColumnStacked, ChartNoAxesCombined, LayoutDashboard, ShoppingBasket,  } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 
 const AdminSidebar = ({open, setOpen }) => {
@@ -9,7 +9,9 @@ const AdminSidebar = ({open, setOpen }) => {
   const adminSidebarMenuItems = [
     { id: "dashboard", label: "Dashboard", path: "/admin/dashboard", icon: <LayoutDashboard /> },
     { id: "products", label: "Products", path: "/admin/products", icon: <ShoppingBasket /> },
+    { id: "category", label: "Category", path: "/admin/category", icon: <ChartColumnStacked /> },
     { id: "orders", label: "Orders", path: "/admin/orders", icon: <BadgeCheck /> },
+
   ];
 
   const MenuItems = () => (

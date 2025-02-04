@@ -20,6 +20,8 @@ import { ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux'
 import { checkAuth } from './store/auth-slice'
 import { Skeleton } from "@/components/ui/skeleton"
+import Categories from './pages/admin-view/Categories'
+import { Toaster } from "@/components/ui/toaster"
 
 
 const App = () => {
@@ -57,6 +59,7 @@ const App = () => {
           <Route path='features' element={<Features />} />
           <Route path='orders' element={<Orders />} />
           <Route path='products' element={<Products />} />
+          <Route path='category' element={<Categories />}/>
         </Route>
         <Route path='/shop' element={
           <CheckAuth isAuthenticated={isAuthenticated} user={user}>
@@ -72,6 +75,7 @@ const App = () => {
         <Route path="*" element={<NotFound />} />
         <Route path="/unauth-page" element={<UnauthPage />} />
       </Routes>
+      <Toaster />
     </div>
   )
 }

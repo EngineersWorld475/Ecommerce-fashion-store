@@ -108,3 +108,13 @@ export const addProductFormElements = [
         placeholder: 'Enter total stock'
     }
 ]
+
+export const addCategoryFormElements = [
+    {
+        label: 'Category name',
+        name: 'categoryName',
+        componentType: 'input',
+        type: 'text',
+        placeholder: 'Enter category name'
+    }
+]

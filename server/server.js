@@ -5,7 +5,8 @@ const dotenv = require('dotenv');
 const cors = require('cors')
 const app = express()
 const authRoutes = require('./routes/auth/auth-routes')
-const adminProductsRouter = require('./routes/admin/product-routes')
+const adminProductsRoutes = require('./routes/admin/product-routes')
+const categoryRoutes = require('./routes/admin/category-routes')
 
 dotenv.config();
 
@@ -27,7 +28,8 @@ app.use(cors({
 
 // routes
 app.use('/api/auth', authRoutes)
-app.use('/api/admin/products', adminProductsRouter)
+app.use('/api/admin/products', adminProductsRoutes)
+app.use('/api/admin/category', categoryRoutes)
 
 // creating a database connection
 mongoose.connect(process.env.MONGO_URL).then(() => console.log('Database connected successfully...')).catch((error) => console.log(error))

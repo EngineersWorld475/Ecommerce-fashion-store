@@ -5,7 +5,7 @@ import { FileIcon, UploadCloudIcon, XIcon } from 'lucide-react'
 import { Button } from '../ui/button'
 import axios from 'axios'
 
-const ProductImageUpload = ({ file, setFile, uploadedImageUrl, setUploadedImageUrl }) => {
+const ProductImageUpload = ({ file, setFile, uploadedImageUrl, setUploadedImageUrl, setImageLoadingState }) => {
   const inputRef = useRef(null)
 
   const handleImageFileChange = (e) => {
@@ -40,11 +40,13 @@ const ProductImageUpload = ({ file, setFile, uploadedImageUrl, setUploadedImageU
   }
 
   const uploadImageToCloudinary = async () => {
+    setImageLoadingState(true)
     const data = new FormData();
     data.append('my_file', file);
     const response = await axios.post('http://localhost:5000/api/admin/products/upload-image', data)
     if(response?.data?.success) {
       setUploadedImageUrl(response.data.result.url)
+      setImageLoadingState(false)
     }
   }
 
@@ -53,6 +55,8 @@ const ProductImageUpload = ({ file, setFile, uploadedImageUrl, setUploadedImageU
       uploadImageToCloudinary()
     }
   }, [file])
+  console.log('...file',file)
+  console.log('...uploadedurl',uploadedImageUrl)
 
   return (
     <> 
@@ -77,7 +81,7 @@ const ProductImageUpload = ({ file, setFile, uploadedImageUrl, setUploadedImageU
               <span className='sr-only'>Remove File</span>
             </Button>
           </div>
-        }
+        } 
       </div>
     </>
   )
