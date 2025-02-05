@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Label } from '../ui/label';
 import { Checkbox } from '../ui/checkbox';
 
-const ProductFilter = () => {
+const ProductFilter = ({filters, handleFilter}) => {
   const dispatch = useDispatch();
   const { listOfCategories } = useSelector((state) => state.adminCategories);
   const filterOptions = {
@@ -41,8 +41,8 @@ const ProductFilter = () => {
                 <h3 className='text-base font-bold mt-5'>{keyItem}</h3>
                 <div className='grid gap-2 mt-2'>
                   {
-                    filterOptions[keyItem]?.map((option) => <Label className="flex items-center gap-2 font-normal">
-                      <Checkbox />
+                    filterOptions[keyItem]?.map((option) => <Label key={option.id} className="flex items-center gap-2 font-normal">
+                      <Checkbox onCheckedChange={() => handleFilter(keyItem, option?.id)} checked = {filters && Object.keys(filters).length > 0 && filters[keyItem] && filters[keyItem].indexOf(option.id) > -1 } />
                       {option?.label}
                     </Label>)
                   }
