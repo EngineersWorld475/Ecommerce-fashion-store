@@ -27,10 +27,7 @@ import { Toaster } from "@/components/ui/toaster"
 const App = () => {
   const { isAuthenticated, user, isLoading } = useSelector((state) => state.auth)
   const dispatch = useDispatch();
-  console.log('...isAuthenticated', isAuthenticated)
-  console.log('...user', user)
-  console.log('...isLoading', isLoading)
-
+  
   useEffect(() => {
     dispatch(checkAuth())
   }, [dispatch])
