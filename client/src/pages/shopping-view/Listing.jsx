@@ -18,7 +18,7 @@ const Listing = () => {
 
 
   const dispatch = useDispatch();
-  const { productList } = useSelector((state) => state.shoppingProducts)
+  const { isLoading, productList } = useSelector((state) => state.shoppingProducts)
 
   // sort function
   const handleSort = (value) => {
@@ -27,12 +27,12 @@ const Listing = () => {
 
   //filter function
   const handleFilter = (getSectionId, getCurrentOption) => {
-    let cpyFilters = {...filters};
+    let cpyFilters = { ...filters };
     // Finds the index of getSectionId in the current filter keys.
     const indexOfCurrentSection = Object.keys(cpyFilters).indexOf(getSectionId)
 
     // Checks if getSectionId doesn't exist in the current filters. If no filter for that section exists, create a new one.
-    if(indexOfCurrentSection === -1) {
+    if (indexOfCurrentSection === -1) {
       cpyFilters = {
         ...cpyFilters,
         [getSectionId]: [getCurrentOption]
@@ -41,8 +41,8 @@ const Listing = () => {
       // Finds the position of getCurrentOption inside the existing filter list for that section. Helps check if the option already exists.
       const indexOfCurrentOption = cpyFilters[getSectionId].indexOf(getCurrentOption);
 
-      if(indexOfCurrentOption === -1){
-      // Adds getCurrentOption if it doesn't already exist.
+      if (indexOfCurrentOption === -1) {
+        // Adds getCurrentOption if it doesn't already exist.
         cpyFilters[getSectionId].push(getCurrentOption)
       } else {
         // Removes the existing filter option by its index if it's already present.
@@ -53,23 +53,25 @@ const Listing = () => {
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
   }
 
+  // building a query string from the filters object 
   const createSearchParamsHelper = (filterParams) => {
     const queryParams = [];
 
-    for(const [key, value] of Object.entries(filterParams)) {
-      if(Array.isArray(value) && value.length > 0) {
+    for (const [key, value] of Object.entries(filterParams)) {
+      if (Array.isArray(value) && value.length > 0) {
         const paramValue = value.join(',')
         queryParams.push(`${key}=${encodeURIComponent(paramValue)}`)
       }
     }
-    console.log('...queryParams', queryParams)
     return queryParams.join('&')
   }
 
   // fetch list of products
   useEffect(() => {
-    dispatch(fetchAllFiteredProducts())
-  }, [dispatch])
+    if (filters !== null && sort !== null) {
+      dispatch(fetchAllFiteredProducts({ filterParams: filters, sortParams: sort }))
+    }
+  }, [dispatch, filters, sort])
 
   useEffect(() => {
     setSort('price-lowtohigh');
@@ -77,13 +79,14 @@ const Listing = () => {
   }, [])
 
   useEffect(() => {
-    if(filters && Object.keys(filters).length > 0) {
+
+    if (filters && Object.keys(filters).length > 0) {
       const createQueryString = createSearchParamsHelper(filters)
       setSearchParams(new URLSearchParams(createQueryString))
     }
   }, [filters])
 
-
+  console.log(filters, sort)
   return (
     <>
       <div className='grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6'>
@@ -111,18 +114,23 @@ const Listing = () => {
             </div>
           </div>
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-4'>
-            {productList && productList.length > 0 ? (
-              productList?.map((product) => {
-                return (
-                  <ShoppingProductTile product={product} />
-                )
-              })
-            ) :
-              <div className='font-semibold text-xl'>
-                Loading....
+            {isLoading ? (
+              <div className='col-span-full flex justify-center items-center'>
+                <h2 className='text-gray-500 text-lg'>Loading products...</h2>
               </div>
-            }
+            ) : productList && productList.length > 0 ? (
+              productList.map((product) => (
+                <ShoppingProductTile key={product.id || product._id} product={product} />
+              ))
+            ) : (
+              <div className='col-span-full flex justify-center items-center'>
+                <h2 className='font-semibold text-xl text-gray-600'>
+                  No products found for the selected sort option. Please try a different one.
+                </h2>
+              </div>
+            )}
           </div>
+
         </div>
       </div>
 
