@@ -1,4 +1,5 @@
 import ProductImageUpload from '@/components/admin-view/ProductImageUpload'
+import ProductTile from '@/components/admin-view/ProductTile'
 import Form from '@/components/common/Form'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -141,18 +142,19 @@ const Products = () => {
         <Button onClick={() => setOpenCreateProductsDialogue(true)} className="bg-black">Add New Product</Button>
       </div>
       <div className='grid gap-4 md:grid-cols-3 lg:grid-cols-4'>
-        <Sheet open={openCreateProductsDialogue} onOpenChange={setOpenCreateProductsDialogue}>
-          <SheetContent side="right" className="overflow-auto bg-white">
-            <SheetHeader>
-              <SheetTitle>Add New Product</SheetTitle>
-            </SheetHeader>
-            <ProductImageUpload file={imageFile} setFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl} setImageLoadingState={setImageLoadingState} imageLoadingState={imageLoadingState} />
-            <div className='py-6'>
-              <Form formControls={addProductFormElements} formData={formData} setFormData={setFormData} buttonText='Add' onSubmit={onSubmit} />
-            </div>
-          </SheetContent>
-        </Sheet>
+        {listOfProducts && listOfProducts.data && listOfProducts.data.length > 0 ? listOfProducts.data.map((productItem) => <ProductTile product={productItem} />) : null}
       </div>
+      <Sheet open={openCreateProductsDialogue} onOpenChange={setOpenCreateProductsDialogue}>
+        <SheetContent side="right" className="overflow-auto bg-white">
+          <SheetHeader>
+            <SheetTitle>Add New Product</SheetTitle>
+          </SheetHeader>
+          <ProductImageUpload file={imageFile} setFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl} setImageLoadingState={setImageLoadingState} imageLoadingState={imageLoadingState} />
+          <div className='py-6'>
+            <Form formControls={addProductFormElements} formData={formData} setFormData={setFormData} buttonText='Add' onSubmit={onSubmit} />
+          </div>
+        </SheetContent>
+      </Sheet>
     </>
 
   )
