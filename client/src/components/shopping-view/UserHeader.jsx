@@ -76,8 +76,8 @@ const UserHeader = () => {
           </div>
         ) : (
           <div className='flex flex-row justify-center items-center gap-4 lg:gap-7'>
-            <Button onClick={() => setOpenCartSheet(true)} className="text-[#60C54B] w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8">
-              <ShoppingBag  />
+            <Button onClick={() => setOpenCartSheet(true)} className="bg-transparent hover:bg-transparent">
+              <ShoppingBag style={{ color: '#60C54B', width: '30px', height: '30px', cursor: 'pointer' }} />
             </Button>
             {/* user dropdown */}
             <UserDropdown />
