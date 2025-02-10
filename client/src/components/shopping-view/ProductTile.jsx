@@ -2,9 +2,10 @@ import React from 'react'
 import { Card, CardContent, CardFooter } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
+import { useSelector } from 'react-redux'
 
 
-const ShoppingProductTile = ({ product, getProductDetails }) => {
+const ShoppingProductTile = ({ product, getProductDetails, handleAddToCart }) => {
 
 
     return (
@@ -28,10 +29,11 @@ const ShoppingProductTile = ({ product, getProductDetails }) => {
                         ) : null}
                     </div>
                 </CardContent>
-                <CardFooter>
-                    <Button className="w-full h-15 bg-gray-700">Add to cart</Button>
-                </CardFooter>
+
             </div>
+            <CardFooter>
+                <Button className="w-full h-15 bg-gray-700" onClick={() => handleAddToCart(product._id)}>Add to cart</Button>
+            </CardFooter>
         </Card>
     )
 }

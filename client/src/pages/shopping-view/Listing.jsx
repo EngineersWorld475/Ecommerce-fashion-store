@@ -10,15 +10,18 @@ import { fetchAllFiteredProducts } from '../../store/shop/product-slice';
 import ShoppingProductTile from '@/components/shopping-view/ProductTile';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { fetchProductDetails } from '@/store/shop/product-details-slice';
+import { addToCart, fetchCartItems } from '@/store/shop/cart-slice';
+import { toast } from 'react-toastify';
 
 
 const Listing = () => {
 
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null)
+  const { user } = useSelector((state) => state.auth)
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate();
-
+  const notify = () => toast(<p className='text-green-500'>Product Added to Cart</p>);
 
   const dispatch = useDispatch();
   const { isLoading, productList } = useSelector((state) => state.shoppingProducts);
@@ -77,6 +80,24 @@ const Listing = () => {
     })
   }
 
+  // handling adding product to cart
+  const handleAddToCart = (productId) => {
+    dispatch(addToCart({
+      userId: user.id,
+      productId: productId,
+      quantity: 1
+    })).then((result) => {
+      if(result?.payload?.success) {
+        dispatch(fetchCartItems(user.id)).then((result) => {
+          if(result?.payload?.success) {
+            notify()
+          }
+          
+        })
+      }
+    })
+  }
+
 
   // fetch list of products
   useEffect(() => {
@@ -131,7 +152,7 @@ const Listing = () => {
               </div>
             ) : productList && productList.length > 0 ? (
               productList.map((product) => (
-                <ShoppingProductTile key={product.id || product._id} product={product} getProductDetails={getProductDetails} />
+                <ShoppingProductTile key={product.id || product._id} product={product} getProductDetails={getProductDetails} handleAddToCart={handleAddToCart} />
               ))
             ) : (
               <div className='col-span-full flex justify-center items-center'>

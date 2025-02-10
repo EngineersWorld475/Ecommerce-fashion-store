@@ -14,6 +14,7 @@ export default  defineConfig({
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+			customWhite: '#ffffff',
 			veltrix_green: '#60C54B',
   			card: {
   				DEFAULT: 'hsl(var(--card))',

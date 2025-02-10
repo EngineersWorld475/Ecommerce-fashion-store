@@ -11,7 +11,7 @@ const addToCart = async (req, res, next) => {
         }
 
         const product = await Product.findById(productId);
-
+ 
         if (!product) {
             return next(createError(404, 'Product not found'))
         }
@@ -48,10 +48,10 @@ const fetchCartItems = async (req, res, next) => {
             return next(createError(400, 'User id is required'))
         }
 
-        const cart = await Cart.findOne({ userId }).populate({
-            path: 'item.productId',
+        const cart = await Cart.findOne({ userId }).populate({ 
+            path: 'items.productId',
             select: "image title price salePrice"
-        })
+        }) 
 
         if (!cart) {
             return next(createError(404, 'Cart not found'))
@@ -62,13 +62,13 @@ const fetchCartItems = async (req, res, next) => {
         if (validItems.length < cart.items.length) {
             cart.items = validItems;
             await cart.save()
-        }
+        } 
 
         const populateCartItems = validItems.map(item => ({
-            productId: item.productId,
+            productId: item.productId._id,
             image: item.productId.image,
             title: item.productId.title,
-            price: item.productId.pice,
+            price: item.productId.price,
             salePrice: item.productId.salePrice,
             quantity: item.quantity
         }))
@@ -89,6 +89,7 @@ const fetchCartItems = async (req, res, next) => {
 const updateCartItemQty = async (req, res, next) => {
     try {
         const { userId, productId, quantity } = req.body;
+        console.log(req.body)
 
         if (!userId || !productId || !quantity) {
             return next(createError(400, 'Please provide valid data'))
@@ -99,11 +100,11 @@ const updateCartItemQty = async (req, res, next) => {
             return next(createError(404, 'Cart not found'))
         }
 
-        const findCurrentProductIndex = cart.items.findIndex((item) => item.productId.toString === productId)
+        const findCurrentProductIndex = cart.items.findIndex((item) => item.productId.toString() === productId)
 
         if (findCurrentProductIndex === -1) {
             return res.status(404).json({
-                success: false,
+                success: false, 
                 message: 'Cart item not present !'
             })
         }
@@ -111,7 +112,7 @@ const updateCartItemQty = async (req, res, next) => {
         cart.items[findCurrentProductIndex].quantity = quantity;
         await cart.save();
 
-        await Cart.populate({
+        await cart.populate({
             path: 'items.productId',
             select: 'image title price salePrice'
         })
@@ -159,7 +160,7 @@ const deleteCartItem = async (req, res, next) => {
 
         await cart.save();
 
-        await Cart.populate({
+        await cart.populate({
             path: 'items.productId',
             select: 'image title price salePrice'
         })
@@ -188,7 +189,5 @@ const deleteCartItem = async (req, res, next) => {
     }
 }
 
-
-module.exports = {addToCart, fetchCartItems, updateCartItemQty, deleteCartItem
-
-}
+ 
+module.exports = {addToCart, fetchCartItems, updateCartItemQty, deleteCartItem}
