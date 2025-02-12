@@ -83,7 +83,7 @@ const Listing = () => {
   // handling adding product to cart
   const handleAddToCart = (productId) => {
     dispatch(addToCart({
-      userId: user.id,
+      userId: user?.id,
       productId: productId,
       quantity: 1
     })).then((result) => {

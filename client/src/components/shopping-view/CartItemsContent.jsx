@@ -11,11 +11,11 @@ const CartItemsContent = ({cartContent}) => {
 
   const handleDeleteCartItem = (cartContent) => {
     dispatch(deleteCartItem({
-      userId: user.id,
-      productId: cartContent.productId
+      userId: user?.id,
+      productId: cartContent?.productId
     }))
     .then((result) => {
-      if (result.payload.success) {
+      if (result?.payload?.success) {
         toast(
           <p className='text-red-500'>Cart item deleted</p>
         );
@@ -27,7 +27,7 @@ const CartItemsContent = ({cartContent}) => {
 
   const handleUpdateQuantity = (getCartItem, typeOfAction) => {
     dispatch(updateCart({
-      userId: user.id,
+      userId: user?.id,
       productId: cartContent?.productId,
       quantity: typeOfAction === 'plus' ? getCartItem?.quantity + 1 : getCartItem?.quantity - 1
     })).then((result) => {

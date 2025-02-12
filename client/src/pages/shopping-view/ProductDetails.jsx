@@ -1,14 +1,37 @@
 import { Button } from '@/components/ui/button';
+import { addToCart, fetchCartItems } from '@/store/shop/cart-slice';
 import { fetchProductDetails } from '@/store/shop/product-details-slice';
 import { StarIcon } from 'lucide-react';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
+import { toast } from 'react-toastify';
 
 const ProductDetailsDialog = () => {
   const dispatch = useDispatch()
   const { id } = useParams();
   const { productDetails } = useSelector((state) => state.shoppingProductDetails);
+  const { user } = useSelector((state) => state.auth);
+  const {isCartLoading} = useSelector((state) => state.ShoppingCart)
+  const notify = () => toast(<p className='text-green-500'>Product Added to Cart</p>);
+
+  //Adding product to cart
+  const handleAddToCart = (productId) => {
+      dispatch(addToCart({
+        userId: user?.id,
+        productId: productId,
+        quantity: 1
+      })).then((result) => {
+        if(result?.payload?.success) {
+          dispatch(fetchCartItems(user.id)).then((result) => {
+            if(result?.payload?.success) {
+              notify()
+            }
+            
+          })
+        }
+      })
+    }
 
   useEffect(() => {
     dispatch(fetchProductDetails(id))
@@ -36,7 +59,7 @@ const ProductDetailsDialog = () => {
           <h1 className='text-3xl text-green-500'>${productDetails?.salePrice}</h1>
         </div>
         <div className='max-w-[500px] mb-5'>
-          <Button className="w-full h-15 bg-gray-700">Add to Cart</Button>
+          <Button className="w-full h-15 bg-gray-700" onClick={() => handleAddToCart(productDetails?._id)}>{isCartLoading ? 'Adding...' : 'Add to Cart'}</Button>
         </div>
         <div className='max-w-[500px] h-0.5 bg-gray-300 mb-3'></div>
         <h2 className='text-xl font-semibold mb-5'>Reviews</h2>

@@ -89,9 +89,8 @@ const fetchCartItems = async (req, res, next) => {
 const updateCartItemQty = async (req, res, next) => {
     try {
         const { userId, productId, quantity } = req.body;
-        console.log(req.body)
 
-        if (!userId || !productId || !quantity) {
+        if (!userId || !productId || !quantity) { 
             return next(createError(400, 'Please provide valid data'))
         }
 
