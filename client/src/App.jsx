@@ -23,6 +23,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import Categories from './pages/admin-view/Categories'
 import { Toaster } from "@/components/ui/toaster"
 import ProductDetailsDialog from './pages/shopping-view/ProductDetails'
+import ScrollToTop from './components/scroll-to-top'
 
 
 const App = () => {
@@ -42,6 +43,7 @@ const App = () => {
 
   return (
     <div className='flex flex-col overflow-hidden bg-white'>
+      <ScrollToTop />
       <ToastContainer />
       <Routes>
       <Route path='/auth' element={<AuthLayout />}>
