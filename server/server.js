@@ -9,6 +9,7 @@ const adminProductsRoutes = require('./routes/admin/product-routes')
 const categoryRoutes = require('./routes/admin/category-routes')
 const shopProductRoutes = require('./routes/shop/product-routes')
 const cartRoutes = require('./routes/shop/cart-routes')
+const addressRoutes = require('./routes/shop/address-routes')
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use('/api/admin/products', adminProductsRoutes)
 app.use('/api/admin/category', categoryRoutes)
 app.use('/api/shop/products', shopProductRoutes)
 app.use('/api/shop/cart', cartRoutes)
+app.use('/api/shop/address', addressRoutes)
 
 // creating a database connection
 mongoose.connect(process.env.MONGO_URL).then(() => console.log('Database connected successfully...')).catch((error) => console.log(error))
