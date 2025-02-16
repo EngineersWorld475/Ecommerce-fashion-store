@@ -1,0 +1,62 @@
+import React from 'react'
+import { Route, Router, Routes } from 'react-router-dom'
+import AuthLayout from './components/auth/AuthLayout'
+import AuthLogin from './pages/auth/AuthLogin'
+import AuthRegister from './pages/auth/AuthRegister'
+import AdminLayout from './components/admin-view/AdminLayout'
+import Dashboard from './pages/admin-view/Dashboard'
+import Features from './pages/admin-view/Features'
+import Orders from './pages/admin-view/Orders'
+import Products from './pages/admin-view/Products'
+import UserLayout from './components/shopping-view/UserLayout'
+import NotFound from './pages/NotFound'
+import Accounts from './pages/shopping-view/Accounts'
+import Checkout from './pages/shopping-view/Checkout'
+import Listing from './pages/shopping-view/Listing'
+import Home from './pages/shopping-view/Home'
+import CheckAuth from './components/common/CheckAuth'
+import UnauthPage from './pages/unauth-page'
+
+const App = () => {
+  const isAuthenticated = false;
+  const user = null;
+  return (
+    <div className='flex flex-col overflow-hidden bg-white'>
+      <h1>Header component</h1>
+      <Routes>
+        <Route path='/auth' element={
+          <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+            <AuthLayout />
+          </CheckAuth>
+        }>
+          <Route path='login' element={<AuthLogin />} />
+          <Route path='register' element={<AuthRegister />} />
+        </Route>
+        <Route path='/admin' element={
+          <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+            <AdminLayout />
+          </CheckAuth>
+        }>
+          <Route path='dashboard' element={<Dashboard />} />
+          <Route path='features' element={<Features />} />
+          <Route path='orders' element={<Orders />} />
+          <Route path='products' element={<Products />} />
+        </Route>
+        <Route path='/shop' element={
+          <CheckAuth isAuthenticated={isAuthenticated} user={user}>
+            <UserLayout />
+          </CheckAuth>
+        }>
+          <Route path='home' element={<Home />} />
+          <Route path='accounts' element={<Accounts />} />
+          <Route path='checkout' element={<Checkout />} />
+          <Route path='listing' element={<Listing />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+        <Route path="/unauth-page" element={<UnauthPage />} />
+      </Routes>
+    </div>
+  )
+}
+
+export default App

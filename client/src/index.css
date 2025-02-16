@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ... */
+
+:root {
+    --primary: 220 90% 56%; /* Example HSL value */
+    --primary-foreground: 0 0% 100%; /* White or any foreground color */
+  }
+  
+  [data-theme="dark"] {
+    --primary: 220 90% 56%;
+    --primary-foreground: 0 0% 100%;
+  }
