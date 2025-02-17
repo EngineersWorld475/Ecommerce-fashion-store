@@ -32,7 +32,7 @@ const getFilteredProducts = async (req, res, next) => {
             default:
                 break;
         }
-
+        
 
         const products = await Product.find(filters).sort(sort);
         return res.status(200).json({

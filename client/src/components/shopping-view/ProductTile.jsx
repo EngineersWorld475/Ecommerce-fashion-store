@@ -5,7 +5,7 @@ import { Button } from '../ui/button'
 import { useSelector } from 'react-redux'
 
 
-const ShoppingProductTile = ({ product, getProductDetails, handleAddToCart }) => {
+const ShoppingProductTile = ({ product, getProductDetails, handleAddToCart, hideCartButton }) => {
 
 
     return (
@@ -32,7 +32,9 @@ const ShoppingProductTile = ({ product, getProductDetails, handleAddToCart }) =>
 
             </div>
             <CardFooter>
-                <Button className="w-full h-15 bg-gray-700" onClick={() => handleAddToCart(product._id)}>Add to cart</Button>
+                {!hideCartButton && (
+                    <Button className="w-full h-15 bg-gray-700" onClick={() => handleAddToCart(product._id)}>Add to cart</Button>
+                )}
             </CardFooter>
         </Card>
     )
