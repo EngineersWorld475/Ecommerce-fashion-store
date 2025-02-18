@@ -4,12 +4,12 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 
 
+const ShoppingProductTile = ({ product, getProductDetails }) => {
 
-const ShoppingProductTile = ({ product }) => {
-    
+
     return (
         <Card className="w-full max-w-sm mx-auto">
-            <div>
+            <div className='cursor-pointer' onClick={() => getProductDetails(product?._id)}>
                 <div className='relative'>
                     <img src={product?.image} alt={product?.title} className='w-full h-[300px] object-cover' />
                     {
@@ -19,7 +19,7 @@ const ShoppingProductTile = ({ product }) => {
                 <CardContent className='p-4'>
                     <h2 className='text-xl font-bold mb-2 line-clamp-1'>{product?.title}</h2>
                     <div className='flex items-center mb-2'>
-                        <span className='text-sm' style={{color: '#60C54B' }}>{product?.brand}</span>
+                        <span className='text-sm' style={{ color: '#60C54B' }}>{product?.brand}</span>
                     </div>
                     <div className='flex flex-row justify-between items-center mb-2'>
                         <span className={`${product?.salePrice > 0 ? 'line-through' : ''} text-lg font-semibold text-primary`}>${product?.price}</span>

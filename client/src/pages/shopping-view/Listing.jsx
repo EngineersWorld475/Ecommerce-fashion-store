@@ -8,17 +8,20 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllFiteredProducts } from '../../store/shop/product-slice';
 import ShoppingProductTile from '@/components/shopping-view/ProductTile';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { fetchProductDetails } from '@/store/shop/product-details-slice';
+
 
 const Listing = () => {
 
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate();
 
 
   const dispatch = useDispatch();
-  const { isLoading, productList } = useSelector((state) => state.shoppingProducts)
+  const { isLoading, productList } = useSelector((state) => state.shoppingProducts);
 
   // sort function
   const handleSort = (value) => {
@@ -66,6 +69,15 @@ const Listing = () => {
     return queryParams.join('&')
   }
 
+  const getProductDetails = (getCurrentProductId) => {
+    dispatch(fetchProductDetails(getCurrentProductId)).then((result) => {
+      if(result?.payload?.success) {
+        navigate(`/shop/product-details/${result?.payload?.data?._id}`)
+      }
+    })
+  }
+
+
   // fetch list of products
   useEffect(() => {
     if (filters !== null && sort !== null) {
@@ -86,7 +98,6 @@ const Listing = () => {
     }
   }, [filters])
 
-  console.log(filters, sort)
   return (
     <>
       <div className='grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6'>
@@ -120,7 +131,7 @@ const Listing = () => {
               </div>
             ) : productList && productList.length > 0 ? (
               productList.map((product) => (
-                <ShoppingProductTile key={product.id || product._id} product={product} />
+                <ShoppingProductTile key={product.id || product._id} product={product} getProductDetails={getProductDetails} />
               ))
             ) : (
               <div className='col-span-full flex justify-center items-center'>

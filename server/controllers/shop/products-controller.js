@@ -1,4 +1,5 @@
 const Product = require('../../models/Product');
+const createError = require('../../utils/errorHandler');
 
 const getFilteredProducts = async (req, res, next) => {
     try {
@@ -44,4 +45,21 @@ const getFilteredProducts = async (req, res, next) => {
     }
 }
 
-module.exports = { getFilteredProducts }
+const getProductDetails = async (req, res, next) => {
+    try {
+        const {id} = req.params;
+        const currentProduct = await Product.findById(id);
+        if(!currentProduct) {
+            return next(createError(404, 'Product is not available'))
+        }
+
+        return res.status(200).json({
+            success: true,
+            data:currentProduct
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { getFilteredProducts, getProductDetails }

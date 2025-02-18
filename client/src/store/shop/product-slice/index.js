@@ -4,7 +4,7 @@ import axios from "axios";
 
 const initialState = {
     isLoading: true,
-    productList: []
+    productList: [],
 }
 
 export const fetchAllFiteredProducts = createAsyncThunk('/shop/get-filter-products', async({filterParams, sortParams}) => {
@@ -15,6 +15,7 @@ export const fetchAllFiteredProducts = createAsyncThunk('/shop/get-filter-produc
     const response = await axios.get(`http://localhost:5000/api/shop/products/get-fiter-products?${query}`)
     return response?.data
 })
+
 
 const shoppingProductSlice = createSlice({
     name: 'shoppingProducts',

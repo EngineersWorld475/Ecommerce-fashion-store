@@ -22,6 +22,7 @@ import { checkAuth } from './store/auth-slice'
 import { Skeleton } from "@/components/ui/skeleton"
 import Categories from './pages/admin-view/Categories'
 import { Toaster } from "@/components/ui/toaster"
+import ProductDetailsDialog from './pages/shopping-view/ProductDetails'
 
 
 const App = () => {
@@ -67,6 +68,7 @@ const App = () => {
           <Route path='accounts' element={<Accounts />} />
           <Route path='checkout' element={<Checkout />} />
           <Route path='listing' element={<Listing />} />
+          <Route path="product-details/:id" element={<ProductDetailsDialog />} />
         </Route>
         <Route path='/' element={<Navigate to='/shop/home' replace />} />
         <Route path="*" element={<NotFound />} />

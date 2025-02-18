@@ -25,12 +25,14 @@ const ProductFilter = ({filters, handleFilter}) => {
       { id: 'h&m', label: 'H&M' }
     ]
   }
+
+  
   useEffect(() => {
     dispatch(getCategories())
   }, [dispatch])
   return (
     <>
-      <div className='flex flex-col justify-start border gap-5'>
+      <div className='flex flex-col justify-start border gap-5' >
         <div style={{ backgroundColor: '#60C54B', color: 'white' }}>
           <h1 className='px-5 py-2 font-bold text-xl'>Filters</h1>
         </div>
