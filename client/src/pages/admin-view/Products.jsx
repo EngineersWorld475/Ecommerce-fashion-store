@@ -165,7 +165,7 @@ const Products = () => {
   return (
     <>
       <div className='flex mb-5 w-full justify-end'>
-        <Button onClick={() => setOpenCreateProductsDialogue(true)} className="bg-black">Add New Product</Button>
+        <Button onClick={() => setOpenCreateProductsDialogue(true)} className="bg-black h-15">Add New Product</Button>
       </div>
       <div className='grid gap-4 md:grid-cols-3 lg:grid-cols-4'>
         {listOfProducts && listOfProducts.data && listOfProducts.data.length > 0 ? listOfProducts.data.map((productItem) => <ProductTile key={productItem?._id} setCurrentProductId={setCurrentProductId}  setOpenCreateProductsDialogue={setOpenCreateProductsDialogue} setFormData={setFormData} product={productItem} handleDelete={handleDelete} />) : 
@@ -185,7 +185,7 @@ const Products = () => {
           </SheetHeader>
           <ProductImageUpload file={imageFile} setFile={setImageFile} uploadedImageUrl={uploadedImageUrl} setUploadedImageUrl={setUploadedImageUrl} setImageLoadingState={setImageLoadingState} imageLoadingState={imageLoadingState} isEditMode={currentProductId !== null} />
           <div className='py-6'>
-            <Form  formControls={addProductFormElements} formData={formData} setFormData={setFormData} buttonText={currentProductId ? 'Edit' : 'Add'} onSubmit={onSubmit} isBtnDisabled={isFormValid()}/>
+            <Form  formControls={addProductFormElements} formData={formData} setFormData={setFormData} buttonText={currentProductId ? 'Edit' : 'Add'} onSubmit={onSubmit} />
           </div>
         </SheetContent>
       </Sheet>

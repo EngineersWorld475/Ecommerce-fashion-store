@@ -39,12 +39,11 @@ const loginUser = async (req, res, next) => {
         }
 
         const checkPassword = bcrypt.compareSync(password, existingUser.password);
-        console.log('...checkPassword', checkPassword)
         if (!checkPassword) {
             return next(createError(401, 'please enter the correct password'))
         }
 
-        const token = jwt.sign({ id: existingUser._id, role: existingUser.role, email: existingUser.email }, process.env.CLIENT_SECRET_KEY, { expiresIn: '1d' })
+        const token = jwt.sign({ id: existingUser._id, role: existingUser.role, email: existingUser.email, username: existingUser.username }, process.env.CLIENT_SECRET_KEY, { expiresIn: '1d' })
 
         res.cookie('token', token, { httpOnly: true, secure: false }).json({
             success: true,
@@ -52,7 +51,8 @@ const loginUser = async (req, res, next) => {
             user: {
                 email: existingUser.email,
                 role: existingUser.role, 
-                id: existingUser._id
+                id: existingUser._id,
+                username: existingUser.username
             }
         })
     } catch (error) {

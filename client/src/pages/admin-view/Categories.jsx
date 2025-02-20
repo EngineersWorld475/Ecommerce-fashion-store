@@ -75,7 +75,7 @@ const Categories = () => {
     return (
         <div className='w-full h-80vh flex flex-col'>
             <div className='flex w-full justify-end mb-5' style={{ paddingRight: '50px' }}>
-                <Button className="bg-black text-white" onClick={() => setOpenCreateProductsDialogue(true)}>Add Category</Button>
+                <Button className="bg-black text-white h-15" onClick={() => setOpenCreateProductsDialogue(true)}>Add Category</Button>
             </div>
             <div>
                 <Table>
@@ -93,7 +93,7 @@ const Categories = () => {
 
                                     <TableCell className="font-medium">{category.categoryName}</TableCell>
                                     <TableCell className="font-medium">
-                                        <Button className="bg-red-500 rounded-xl" onClick={() => deleteCategory(category._id)}>Delete</Button>
+                                        <Button className="bg-red-500 rounded-xl h-15" onClick={() => deleteCategory(category._id)}>Delete</Button>
                                     </TableCell>
 
                                 </TableRow>

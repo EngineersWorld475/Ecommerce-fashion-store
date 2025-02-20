@@ -21,7 +21,7 @@ const AdminHeader = ({setOpen}) => {
         <span className='sr-only'>Toggle menu</span>
       </Button>
       <div className='flex flex-1 justify-end'>
-        <Button className="inline-flex gap-2 bg-black rounded-xl text-sm shadow" onClick={handleLogout}>
+        <Button className="inline-flex gap-2 bg-black rounded-xl text-sm shadow h-15" onClick={handleLogout}>
         <LogOut />
           
           Logout</Button>

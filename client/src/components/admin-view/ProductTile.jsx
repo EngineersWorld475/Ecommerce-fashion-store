@@ -27,8 +27,8 @@ const ProductTile = ({ product, setFormData, setOpenCreateProductsDialogue, setC
           </SheetHeader>
           <p className='text-center mb-3 text-gray-500'>Are you sure you want to delete this product?</p>
           <div className='flex items-center justify-center gap-3  w-full'>
-            <Button onClick={() => handleDelete(product?._id)} className="w-1/4 bg-gray-700">Yes</Button>
-            <Button onClick={() => setOpenDeleteProductsDialogue(false)} className="w-1/4 bg-gray-700">Cancel</Button>
+            <Button onClick={() => handleDelete(product?._id)} className="w-1/4 bg-gray-700 h-15">Yes</Button>
+            <Button onClick={() => setOpenDeleteProductsDialogue(false)} className="w-1/4 bg-gray-700 h-15">Cancel</Button>
           </div>
         </SheetContent>
       </Sheet>
@@ -55,14 +55,14 @@ const ProductTile = ({ product, setFormData, setOpenCreateProductsDialogue, setC
           </div>
         </CardContent>
         <CardFooter className="flex gap-3 items-center p-4">
-          <Button className="text-white rounded-xl bg-gray-900 w-1/2" onClick={() => {
+          <Button className="text-white rounded-xl bg-gray-900 w-1/2 h-15" onClick={() => {
             setOpenCreateProductsDialogue(true)
             setCurrentProductId(product?._id) 
             setFormData(product)
           }}>
             Edit
           </Button>
-          <Button className="bg-gray-900 text-white hover:bg-red-600 rounded-xl w-1/2" onClick={() => setOpenDeleteProductsDialogue(true)}>
+          <Button className="bg-gray-900 text-white hover:bg-red-600 rounded-xl w-1/2 h-15" onClick={() => setOpenDeleteProductsDialogue(true)}>
             Delete
           </Button>
         </CardFooter>
